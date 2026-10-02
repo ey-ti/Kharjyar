@@ -1,0 +1,1063 @@
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>خرج‌یار</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f3f4f6;
+            color: #111827;
+            font-family: Tahoma, Arial, sans-serif;
+        }
+
+        .app {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px 15px 50px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #6366f1;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 13px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .primary {
+            width: 100%;
+            background: #111827;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .secondary {
+            width: 100%;
+            background: #e5e7eb;
+            color: #111827;
+            margin-top: 8px;
+        }
+
+        .total {
+            font-size: 27px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 13px;
+        }
+
+        .stat-title {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .expense {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .expense:last-child {
+            border-bottom: none;
+        }
+
+        .expense-title {
+            font-weight: bold;
+        }
+
+        .expense-date {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .expense-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expense-amount {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .delete {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 7px 10px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #9ca3af;
+            padding: 25px 5px;
+        }
+
+        .status {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <h1>خرج‌یار 💰</h1>
+
+    <div class="subtitle">
+        ثبت سریع هزینه‌های روزانه
+    </div>
+
+    <!-- ثبت هزینه -->
+    <div class="card">
+
+        <h3 style="margin-top:0;">
+            ثبت هزینه
+        </h3>
+
+        <label>
+            عنوان
+        </label>
+
+        <input
+            id="title"
+            type="text"
+            placeholder="مثلاً ناهار، تاکسی، خرید..."
+            autocomplete="off"
+        >
+
+        <label>
+            مبلغ (تومان)
+        </label>
+
+        <input
+            id="amount"
+            type="text"
+            inputmode="numeric"
+            placeholder="مثلاً ۱۸۰۰۰۰"
+            autocomplete="off"
+        >
+
+        <button
+            class="primary"
+            onclick="addExpense()"
+        >
+            ثبت هزینه
+        </button>
+
+        <div
+            class="status"
+            id="timeStatus"
+        >
+            در حال دریافت تاریخ...
+        </div>
+
+    </div>
+
+
+    <!-- آمار -->
+    <div class="card">
+
+        <div style="color:#6b7280;font-size:13px;">
+            مجموع هزینه امروز
+        </div>
+
+        <div
+            class="total"
+            id="todayTotal"
+        >
+            ۰ تومان
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    تعداد هزینه‌های امروز
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="todayCount"
+                >
+                    ۰
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    مجموع ماه جاری
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="monthTotal"
+                >
+                    ۰ تومان
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- گزارش -->
+    <div class="card">
+
+        <h3 style="margin-top:0;">
+            گزارش هزینه‌ها
+        </h3>
+
+        <div class="filters">
+
+            <input
+                id="fromDate"
+                type="text"
+                placeholder="از تاریخ ۱۴۰۵/۰۷/۰۱"
+            >
+
+            <input
+                id="toDate"
+                type="text"
+                placeholder="تا تاریخ ۱۴۰۵/۰۷/۳۰"
+            >
+
+        </div>
+
+
+        <button
+            class="secondary"
+            onclick="showReport()"
+        >
+            نمایش گزارش
+        </button>
+
+
+        <button
+            class="secondary"
+            onclick="clearFilters()"
+        >
+            نمایش همه هزینه‌ها
+        </button>
+
+
+        <div
+            id="reportResult"
+            style="margin-top:15px;"
+        ></div>
+
+    </div>
+
+
+    <!-- لیست هزینه‌ها -->
+    <div class="card">
+
+        <h3 style="margin-top:0;">
+            هزینه‌ها
+        </h3>
+
+        <div id="expenseList"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   تنظیمات
+========================================================= */
+
+const STORAGE_KEY = "kharjyar_expenses_v2";
+
+let expenses = [];
+
+let iranNow = null;
+
+
+/* =========================================================
+   تبدیل اعداد فارسی به انگلیسی
+========================================================= */
+
+function convertToEnglishNumbers(value) {
+
+    return String(value)
+        .replace(/[۰-۹]/g, function(char) {
+            return "۰۱۲۳۴۵۶۷۸۹".indexOf(char);
+        })
+        .replace(/[٠-٩]/g, function(char) {
+            return "٠١٢٣٤٥٦٧٨٩".indexOf(char);
+        });
+}
+
+
+/* =========================================================
+   تبدیل عدد به فارسی
+========================================================= */
+
+function faNumber(number) {
+
+    return Number(number).toLocaleString("fa-IR");
+}
+
+
+/* =========================================================
+   دریافت تاریخ شمسی
+   با موتور استاندارد مرورگر
+========================================================= */
+
+function getPersianDate(date) {
+
+    const formatter = new Intl.DateTimeFormat(
+        "fa-IR-u-ca-persian",
+        {
+            timeZone: "Asia/Tehran",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }
+    );
+
+    const parts = formatter.formatToParts(date);
+
+    const year =
+        parts.find(x => x.type === "year").value;
+
+    const month =
+        parts.find(x => x.type === "month").value;
+
+    const day =
+        parts.find(x => x.type === "day").value;
+
+    return `${year}/${month}/${day}`;
+}
+
+
+/* =========================================================
+   دریافت زمان دقیق تهران از اینترنت
+========================================================= */
+
+async function getIranTime() {
+
+    try {
+
+        const response = await fetch(
+            "https://timeapi.io/api/Time/current/zone?timeZone=Asia/Tehran",
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Time API Error");
+        }
+
+        const data = await response.json();
+
+        if (data.dateTime) {
+
+            iranNow = new Date(data.dateTime);
+
+            document.getElementById("timeStatus").textContent =
+                "تاریخ از زمان آنلاین ایران دریافت شد.";
+
+            return;
+        }
+
+        throw new Error("Invalid response");
+
+    }
+
+    catch (error) {
+
+        /*
+           اگر اینترنت یا سرویس زمان در دسترس نبود،
+           از ساعت سیستم استفاده می‌کنیم.
+        */
+
+        iranNow = new Date();
+
+        document.getElementById("timeStatus").textContent =
+            "تاریخ از ساعت دستگاه استفاده می‌کند.";
+    }
+
+    render();
+}
+
+
+/* =========================================================
+   تاریخ امروز
+========================================================= */
+
+function todayPersian() {
+
+    return getPersianDate(
+        iranNow || new Date()
+    );
+}
+
+
+/* =========================================================
+   بارگذاری اطلاعات
+========================================================= */
+
+function loadExpenses() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
+
+        expenses =
+            saved ? JSON.parse(saved) : [];
+
+    }
+
+    catch (error) {
+
+        expenses = [];
+
+    }
+}
+
+
+/* =========================================================
+   ذخیره اطلاعات
+========================================================= */
+
+function saveExpenses() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(expenses)
+    );
+}
+
+
+/* =========================================================
+   ثبت هزینه
+========================================================= */
+
+function addExpense() {
+
+    const titleInput =
+        document.getElementById("title");
+
+    const amountInput =
+        document.getElementById("amount");
+
+
+    const title =
+        titleInput.value.trim();
+
+
+    const amountString =
+        convertToEnglishNumbers(
+            amountInput.value
+        )
+        .replace(/,/g, "")
+        .replace(/٬/g, "")
+        .trim();
+
+
+    const amount =
+        Number(amountString);
+
+
+    if (!title) {
+
+        alert("عنوان هزینه را وارد کن.");
+
+        titleInput.focus();
+
+        return;
+    }
+
+
+    if (!amount || amount <= 0) {
+
+        alert("مبلغ صحیح وارد کن.");
+
+        amountInput.focus();
+
+        return;
+    }
+
+
+    const expense = {
+
+        id: Date.now(),
+
+        title: title,
+
+        amount: amount,
+
+        date: todayPersian(),
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
+    expenses.unshift(expense);
+
+    saveExpenses();
+
+
+    titleInput.value = "";
+
+    amountInput.value = "";
+
+
+    titleInput.focus();
+
+
+    render();
+}
+
+
+/* =========================================================
+   حذف هزینه
+========================================================= */
+
+function deleteExpense(id) {
+
+    const confirmed =
+        confirm("این هزینه حذف شود؟");
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    expenses =
+        expenses.filter(
+            expense =>
+                expense.id !== id
+        );
+
+
+    saveExpenses();
+
+    render();
+}
+
+
+/* =========================================================
+   تبدیل تاریخ شمسی به عدد
+   برای مقایسه بازه‌ها
+========================================================= */
+
+function jalaliNumber(dateString) {
+
+    const english =
+        convertToEnglishNumbers(
+            dateString
+        );
+
+
+    const parts =
+        english
+            .replace(/-/g, "/")
+            .split("/");
+
+
+    if (parts.length !== 3) {
+        return 0;
+    }
+
+
+    const year =
+        Number(parts[0]);
+
+    const month =
+        Number(parts[1]);
+
+    const day =
+        Number(parts[2]);
+
+
+    if (
+        !year ||
+        !month ||
+        !day
+    ) {
+        return 0;
+    }
+
+
+    return (
+        year * 10000 +
+        month * 100 +
+        day
+    );
+}
+
+
+/* =========================================================
+   فیلتر هزینه‌ها
+========================================================= */
+
+function getFilteredExpenses() {
+
+    const from =
+        jalaliNumber(
+            document.getElementById(
+                "fromDate"
+            ).value
+        );
+
+
+    const to =
+        jalaliNumber(
+            document.getElementById(
+                "toDate"
+            ).value
+        );
+
+
+    return expenses.filter(
+        expense => {
+
+            const date =
+                jalaliNumber(
+                    expense.date
+                );
+
+
+            if (
+                from &&
+                date < from
+            ) {
+                return false;
+            }
+
+
+            if (
+                to &&
+                date > to
+            ) {
+                return false;
+            }
+
+
+            return true;
+        }
+    );
+}
+
+
+/* =========================================================
+   نمایش گزارش
+========================================================= */
+
+function showReport() {
+
+    render();
+}
+
+
+/* =========================================================
+   پاک کردن فیلتر
+========================================================= */
+
+function clearFilters() {
+
+    document.getElementById(
+        "fromDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "toDate"
+    ).value = "";
+
+
+    render();
+}
+
+
+/* =========================================================
+   نمایش صفحه
+========================================================= */
+
+function render() {
+
+    const today =
+        todayPersian();
+
+
+    const currentMonth =
+        today.substring(
+            0,
+            7
+        );
+
+
+    /*
+       هزینه‌های امروز
+    */
+
+    const todayExpenses =
+        expenses.filter(
+            expense =>
+                expense.date === today
+        );
+
+
+    /*
+       هزینه‌های ماه جاری
+    */
+
+    const monthExpenses =
+        expenses.filter(
+            expense =>
+                expense.date.startsWith(
+                    currentMonth
+                )
+        );
+
+
+    /*
+       مجموع امروز
+    */
+
+    const todayTotal =
+        todayExpenses.reduce(
+            (sum, expense) =>
+                sum + expense.amount,
+            0
+        );
+
+
+    /*
+       مجموع ماه
+    */
+
+    const monthTotal =
+        monthExpenses.reduce(
+            (sum, expense) =>
+                sum + expense.amount,
+            0
+        );
+
+
+    document.getElementById(
+        "todayTotal"
+    ).textContent =
+        faNumber(todayTotal) +
+        " تومان";
+
+
+    document.getElementById(
+        "todayCount"
+    ).textContent =
+        faNumber(
+            todayExpenses.length
+        );
+
+
+    document.getElementById(
+        "monthTotal"
+    ).textContent =
+        faNumber(monthTotal) +
+        " تومان";
+
+
+    /*
+       هزینه‌های فیلتر شده
+    */
+
+    const filtered =
+        getFilteredExpenses();
+
+
+    /*
+       مجموع گزارش
+    */
+
+    const reportTotal =
+        filtered.reduce(
+            (sum, expense) =>
+                sum + expense.amount,
+            0
+        );
+
+
+    document.getElementById(
+        "reportResult"
+    ).innerHTML = `
+        <div style="
+            background:#f9fafb;
+            padding:12px;
+            border-radius:12px;
+        ">
+            مجموع:
+            <b>
+                ${faNumber(reportTotal)}
+                تومان
+            </b>
+            <br>
+
+            <span style="
+                color:#6b7280;
+                font-size:12px;
+            ">
+                ${faNumber(filtered.length)}
+                هزینه
+            </span>
+        </div>
+    `;
+
+
+    /*
+       نمایش لیست
+    */
+
+    const list =
+        document.getElementById(
+            "expenseList"
+        );
+
+
+    if (!filtered.length) {
+
+        list.innerHTML = `
+            <div class="empty">
+                هنوز هزینه‌ای ثبت نشده.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        filtered
+            .map(expense => `
+
+                <div class="expense">
+
+                    <div>
+
+                        <div class="expense-title">
+                            ${escapeHtml(
+                                expense.title
+                            )}
+                        </div>
+
+                        <div class="expense-date">
+                            ${expense.date}
+                        </div>
+
+                    </div>
+
+
+                    <div class="expense-right">
+
+                        <div class="expense-amount">
+                            ${faNumber(
+                                expense.amount
+                            )}
+                            تومان
+                        </div>
+
+
+                        <button
+                            class="delete"
+                            onclick="deleteExpense(
+                                ${expense.id}
+                            )"
+                        >
+                            حذف
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `)
+            .join("");
+}
+
+
+/* =========================================================
+   جلوگیری از HTML Injection
+========================================================= */
+
+function escapeHtml(text) {
+
+    return String(text)
+        .replace(
+            /[&<>"']/g,
+            function(char) {
+
+                const map = {
+
+                    "&": "&amp;",
+
+                    "<": "&lt;",
+
+                    ">": "&gt;",
+
+                    '"': "&quot;",
+
+                    "'": "&#039;"
+
+                };
+
+                return map[char];
+            }
+        );
+}
+
+
+/* =========================================================
+   Enter در عنوان
+========================================================= */
+
+document
+    .getElementById("title")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                document
+                    .getElementById(
+                        "amount"
+                    )
+                    .focus();
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   Enter در مبلغ
+========================================================= */
+
+document
+    .getElementById("amount")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                addExpense();
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   شروع برنامه
+========================================================= */
+
+loadExpenses();
+
+render();
+
+getIranTime();
+
+</script>
+
+</body>
+</html>
+```

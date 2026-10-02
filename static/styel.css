@@ -1,0 +1,202 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    background: #f3f4f6;
+
+    color: #111827;
+
+    font-family:
+        Tahoma,
+        Arial,
+        sans-serif;
+}
+
+
+.container {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    margin: auto;
+
+    padding: 20px 15px 50px;
+}
+
+
+h1 {
+
+    margin-bottom: 5px;
+}
+
+
+.today {
+
+    color: #6b7280;
+
+    margin-bottom: 20px;
+}
+
+
+.card {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,0.06);
+}
+
+
+label {
+
+    display: block;
+
+    margin-top: 15px;
+
+    margin-bottom: 6px;
+
+    color: #4b5563;
+}
+
+
+input {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+input:focus {
+
+    border-color: #6366f1;
+}
+
+
+button {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #111827;
+
+    color: white;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+.label {
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+.big-number {
+
+    font-size: 27px;
+
+    font-weight: bold;
+
+    margin-top: 5px;
+}
+
+
+.expense {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+
+.expense:last-child {
+
+    border-bottom: none;
+}
+
+
+.expense-title {
+
+    font-weight: bold;
+}
+
+
+.expense-date {
+
+    color: #9ca3af;
+
+    font-size: 12px;
+
+    margin-top: 4px;
+}
+
+
+.expense-amount {
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+
+.delete {
+
+    width: auto;
+
+    margin: 0 0 0 8px;
+
+    padding: 7px 10px;
+
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+.empty {
+
+    text-align: center;
+
+    color: #9ca3af;
+
+    padding: 25px;
+}
